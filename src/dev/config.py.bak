@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
-
+from __future__ import unicode_literals
+from __future__ import print_function
 
 import os
 import re
@@ -12,7 +12,7 @@ from distutils.version import LooseVersion
 try:
 	import configparser
 except ImportError:
-	import configparser as configparser
+	import ConfigParser as configparser
 
 import address
 

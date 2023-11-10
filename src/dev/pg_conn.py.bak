@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
-
+from __future__ import unicode_literals
+from __future__ import print_function
 
 import sys
 import logging
@@ -83,7 +83,6 @@ class PG:
 		output, unused_err = process.communicate(cmd)
 		retcode = process.poll()
 		if exit_on_fail and retcode != 0:
-			output = output.decode('utf-8')
 			output = "\n".join(output.split("\n")[-40:])
 			raise PgError(retcode, cmd, output=output)
 		return (retcode, output)
@@ -112,7 +111,7 @@ class PG:
 
 	def create_roles(self, project=None, roles=None):
 		if project:
-			roles = [x.name for x in project.roles]
+			roles = map(lambda x: x.name, project.roles)
 		if roles:
 			creates = []
 			for role in roles:
@@ -149,7 +148,7 @@ class PG:
 			cmd = io.StringIO()
 			for file in part.files:
 				for l in project.get_file(file):
-					cmd.write(str(l, "UTF8"))
+					cmd.write(unicode(l, "UTF8"))
 				cmd.write(";\n")
 			self.psql(cmd=cmd.getvalue(), single_transaction=part.single_transaction, change_db=True)
 			cmd.close()
@@ -174,7 +173,7 @@ class PG:
 			logging.verbose("load struct from cache file")
 			return open(self.address.cache_file("struct")).read()
 		(retcode, output) = self.pg_dump(change_db=True, no_owner=no_owner, no_acl=no_acl)
-		r = str(output, "UTF8")
+		r = unicode(output, "UTF8")
 		if cache:
 			open(self.address.cache_file("struct"), "w").write(r)
 		return r
@@ -208,7 +207,7 @@ class PG:
 		for tb in project.table_data:
 			c.append("COPY %s TO STDOUT WITH(FORMAT CSV, HEADER, FORCE_QUOTE *, NULL 'NULL@15#7&679');" % (tb,))
 		(retcode, output) = self.psql(cmd="\n".join(c), change_db=True, exit_on_fail=False)
-		data = io.StringIO(str(output, "utf8"))
+		data = io.StringIO(unicode(output, "utf8"))
 
 		line = data.readline()
 		while True:
@@ -233,7 +232,7 @@ class PG:
 					data_table.append(line)
 				dt = list(csv.reader(data_table))
 				for row in dt:
-					for i in range(len(row)):
+					for i in xrange(len(row)):
 						if row[i] == "NULL@15#7&679":
 							row[i] = None
 				r[table_name] = dt

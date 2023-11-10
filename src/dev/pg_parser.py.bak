@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
-
+from __future__ import unicode_literals
+from __future__ import print_function
 
 import re
 import logging
@@ -47,7 +47,7 @@ class Tokens:
 			self.read_next()
 
 
-	def __next__(self):
+	def next(self):
 		buf = io.StringIO()
 		while True:
 			# command

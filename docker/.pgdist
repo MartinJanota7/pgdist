@@ -1,0 +1,2 @@
+[pgdist]
+test_db: postgres:pgdist@localhost:15432/pgdist_test

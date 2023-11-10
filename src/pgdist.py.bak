@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 
 import os
 import sys
@@ -9,10 +9,9 @@ import argparse
 import subprocess
 import logging
 import logging.handlers
-import importlib
 
-importlib.reload(sys)
-
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 description = """
 PGdist - distributes PotgreSQL functions, tables, etc...
@@ -158,7 +157,7 @@ def main():
 	logging.addLevelName(VERBOSE, "VERBOSE")
 	def verbose(message, *args, **kws):
 		if logging.getLogger().root.isEnabledFor(VERBOSE):
-			logging.getLogger().root._log(VERBOSE, message, args, **kws)
+			logging.getLogger().root._log(VERBOSE, message, args, **kws) 
 	logging.verbose = verbose
 	if args.verbose > 2:
 		logging.basicConfig(format="%(asctime)-15s %(filename)s:%(lineno)d %(message)s")
@@ -410,5 +409,5 @@ def args_parse(args, n):
 if __name__ == "__main__":
 	try:
 		main()
-	except KeyboardInterrupt as e:
+	except KeyboardInterrupt, e:
 		pass
